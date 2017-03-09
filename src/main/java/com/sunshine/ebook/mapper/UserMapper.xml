@@ -18,8 +18,12 @@
 		<result column="lastlogtime" property="lastlogtime" jdbcType="TIMESTAMP" />
 	</resultMap>
 
+	<!-- 根据邮箱校验是否已注册 -->
 	<select id="checkEmailIsRegist" parameterType="string" resultType="int">
 		select count(0) from userinfo where email = #{email} and userflag != -1
 	</select>
+	
+	<!-- 注册用户 -->
+	
 
 </mapper> 
