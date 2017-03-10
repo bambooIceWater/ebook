@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @MapperScan("com.sunshine.ebook.mapper")
 public class EbookApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(EbookApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(EbookApplication.class, args);
+    }
 }

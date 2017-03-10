@@ -12,8 +12,8 @@ public class Userinfo implements Serializable {
 	private String password;
 	private String phonenum;
 	private String email;
-	private Integer userflag;
-	private Integer usertype;
+	private String userflag;
+	private String usertype;
 	private String checkcode;
 	private Date createtime;
 	private Date updatetime;
@@ -59,19 +59,19 @@ public class Userinfo implements Serializable {
 		this.email = email;
 	}
 
-	public Integer getUserflag() {
+	public String getUserflag() {
 		return userflag;
 	}
 
-	public void setUserflag(Integer userflag) {
+	public void setUserflag(String userflag) {
 		this.userflag = userflag;
 	}
 
-	public Integer getUsertype() {
+	public String getUsertype() {
 		return usertype;
 	}
 
-	public void setUsertype(Integer usertype) {
+	public void setUsertype(String usertype) {
 		this.usertype = usertype;
 	}
 

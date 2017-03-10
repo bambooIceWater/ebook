@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunshine.ebook.mapper.UserMapper">
+
+    <!-- type为实体类Student，包名已经配置，可以直接写类名 -->
+    <resultMap id="userResultMap" type="com.sunshine.ebook.entity.Userinfo">
+        <id property="userid" column="userid"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="phonenum" property="phonenum" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="userflag" property="userflag" jdbcType="VARCHAR"/>
+        <result column="usertype" property="usertype" jdbcType="VARCHAR"/>
+        <result column="checkcode" property="checkcode" jdbcType="VARCHAR"/>
+        <result column="createtime" property="createtime" jdbcType="TIMESTAMP"/>
+        <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP"/>
+        <result column="lastlogtime" property="lastlogtime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        userid, username, password, phonenum, email, userflag, usertype, checkcode, createtime, updatetime, lastlogtime
+    </sql>
+
+    <!-- 根据邮箱是否已注册 -->
+    <select id="checkEmailIsRegist" resultMap="userResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from userinfo where email = #{email} and userflag = 0
+    </select>
+
+    <!-- 根据手机号是否已注册 -->
+    <select id="checkPhoneIsRegist" resultMap="userResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from userinfo where phonenum = #{phonenum} and userflag = 0
+    </select>
+
+    <!-- 保存用户信息 -->
+    <insert id="saveUserinfo" parameterType="com.sunshine.ebook.entity.Userinfo">
+        insert into userinfo(username, password, phonenum, email, checkcode, createtime, updatetime, lastlogtime)
+        values(#{username}, #{password}, #{phonenum}, #{email}, #{checkcode}, #{createtime}, #{updatetime},
+        #{lastlogtime})
+    </insert>
+
+    <!-- 更新用户信息 -->
+    <update id="updateUserinfo" parameterType="com.sunshine.ebook.entity.Userinfo">
+        update userinfo
+        <set>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="phonenum != null">
+                phonenum = #{phonenum,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="userflag != null">
+                userflag = #{userflag, jdbcType=VARCHAR},
+            </if>
+            <if test="usertype != null">
+                usertype = #{usertype,jdbcType=VARCHAR},
+            </if>
+            <if test="checkcode != null">
+                checkcode = #{checkcode,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null">
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatetime != null">
+                updatetime = #{updatetime, jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastlogtime != null">
+                lastlogtime = #{lastlogtime, jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where userid = #{userid}
+    </update>
+
+</mapper> 
