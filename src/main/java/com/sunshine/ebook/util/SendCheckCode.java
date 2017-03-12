@@ -25,7 +25,7 @@ public class SendCheckCode {
         Random random = new Random();
         for (int i = 0; i < codeSize; i++) {
             String charOrNum = "num";
-            if (0 == type) {
+            if (1 == type) {
                 charOrNum = random.nextInt(2) % 2 == 0 ? "char" : "num";
             }
             if ("char".equalsIgnoreCase(charOrNum)) {
@@ -38,22 +38,8 @@ public class SendCheckCode {
         return checkCode;
     }
 
-    public boolean sendCheckCode(int type) {
-        boolean flag = false;
-        //生成验证码
-        String checkCode = getCheckCode(type);
-        if (0 == type) {
-            //手机验证码
-
-        } else if (1 == type) {
-            //邮箱验证码
-
-        }
-        return flag;
-    }
-
     public static void main(String args[]) {
-        String code = SendCheckCode.getCheckCode(2);
+        String code = SendCheckCode.getCheckCode(1);
         System.out.println(code);
     }
 

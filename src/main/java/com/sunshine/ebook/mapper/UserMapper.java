@@ -6,6 +6,13 @@ import com.sunshine.ebook.entity.Userinfo;
 public interface UserMapper extends BaseMapper<Userinfo> {
 	
 	/**
+	 * 根据条件查询用户信息
+	 * @param userinfo
+	 * @return
+	 */
+	Userinfo getUserinfoByCondition(Userinfo userinfo);
+	
+	/**
 	 * 验证邮箱是否注册
 	 * @param email
 	 * @return
@@ -30,5 +37,12 @@ public interface UserMapper extends BaseMapper<Userinfo> {
 	 * @param userinfo
 	 */
 	void updateUserinfo(Userinfo userinfo);
+	
+	/**
+	 * 校验验证码是否有效
+	 * @param map
+	 * @return
+	 */
+	Userinfo checkCodeIsValid(Userinfo userinfo);
 	
 }

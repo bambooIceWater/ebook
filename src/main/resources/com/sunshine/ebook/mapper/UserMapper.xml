@@ -5,13 +5,13 @@
 
     <!-- type为实体类Student，包名已经配置，可以直接写类名 -->
     <resultMap id="userResultMap" type="com.sunshine.ebook.entity.Userinfo">
-        <id property="userid" column="userid"/>
+        <result column="userid" property="userid" jdbcType="INTEGER"/>
         <result column="username" property="username" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
         <result column="phonenum" property="phonenum" jdbcType="VARCHAR"/>
         <result column="email" property="email" jdbcType="VARCHAR"/>
-        <result column="userflag" property="userflag" jdbcType="VARCHAR"/>
-        <result column="usertype" property="usertype" jdbcType="VARCHAR"/>
+        <result column="userflag" property="userflag" jdbcType="INTEGER"/>
+        <result column="usertype" property="usertype" jdbcType="INTEGER"/>
         <result column="checkcode" property="checkcode" jdbcType="VARCHAR"/>
         <result column="createtime" property="createtime" jdbcType="TIMESTAMP"/>
         <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP"/>
@@ -21,12 +21,71 @@
     <sql id="Base_Column_List">
         userid, username, password, phonenum, email, userflag, usertype, checkcode, createtime, updatetime, lastlogtime
     </sql>
-
-    <!-- 根据邮箱是否已注册 -->
-    <select id="checkEmailIsRegist" resultMap="userResultMap">
+    
+    <!-- 根据条件查询用户信息 -->
+    <select id="getUserinfoByCondition" resultMap="userResultMap" parameterType="com.sunshine.ebook.entity.Userinfo">
         select
         <include refid="Base_Column_List" />
-        from userinfo where email = #{email} and userflag = 0
+        from userinfo 
+        <where>
+        	<if test ="userid != null">
+        		and userid = #{userid}
+        	</if>
+        	<if test ="username != null">
+        		and username = #{username}
+        	</if>
+        	<if test ="password != null">
+        		and password = #{password}
+        	</if>
+        	<if test ="phonenum != null">
+        		and phonenum = #{phonenum}
+        	</if>
+        	<if test ="email != null">
+        		and email = #{email}
+        	</if>
+        	<if test ="userflag != null">
+        		and userflag = #{userflag}
+        	</if>
+        	<if test ="usertype != null">
+        		and usertype = #{usertype}
+        	</if>
+        	<if test ="checkcode != null">
+        		and checkcode = #{checkcode}
+        	</if>
+        </where>
+    </select>
+
+    <!-- 根据邮箱是否已注册 -->
+    <select id="checkEmailIsRegist" resultMap="userResultMap" parameterType="com.sunshine.ebook.entity.Userinfo">
+        select
+        <include refid="Base_Column_List" />
+        from userinfo
+        <where>
+        	<if test ="userid != null">
+        		and userid = #{userid}
+        	</if>
+        	<if test ="username != null">
+        		and username = #{username}
+        	</if>
+        	<if test ="password != null">
+        		and password = #{password}
+        	</if>
+        	<if test ="phonenum != null">
+        		and phonenum = #{phonenum}
+        	</if>
+        	<if test ="email != null">
+        		and email = #{email}
+        	</if>
+        	<if test ="userflag != null">
+        		and userflag = #{userflag}
+        	</if>
+        	<if test ="usertype != null">
+        		and usertype = #{usertype}
+        	</if>
+        	<if test ="checkcode != null">
+        		and checkcode = #{checkcode}
+        	</if>
+        </where>
     </select>
 
     <!-- 根据手机号是否已注册 -->
@@ -80,5 +139,26 @@
         </set>
         where userid = #{userid}
     </update>
+    
+    <!-- 校验验证码是否有效 -->
+    <select id="checkCodeIsValid" parameterType="com.sunshine.ebook.entity.Userinfo" resultType="com.sunshine.ebook.entity.Userinfo">
+    	select 
+    	<include refid="Base_Column_List" /> 
+    	from userinfo 
+    	<where>
+        	<if test ="email != null">
+        		and email = #{email}
+        	</if>
+        	<if test ="phonenum != null">
+        		and phonenum = #{phonenum}
+        	</if>
+        	<if test ="checkcode != null">
+        		and checkcode = #{checkcode}
+        	</if>
+        	<if test ="timeout != null">
+        		and date_add(updatetime, interval #{timeout} minute) >= now()
+        	</if>
+        </where>
+    </select>
 
 </mapper> 

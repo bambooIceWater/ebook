@@ -1,8 +1,16 @@
 package com.sunshine.ebook.service;
 
 import com.sunshine.ebook.entity.Userinfo;
+import com.sunshine.ebook.request.UserRequest;
 
 public interface UserService {
+	
+	/**
+	 * 根据条件查询用户信息
+	 * @param userinfo
+	 * @return
+	 */
+	Userinfo getUserinfoByCondition(Userinfo userinfo);
 	
 	/**
 	 * 验证邮箱是否注册
@@ -36,5 +44,19 @@ public interface UserService {
 	 * @return
 	 */
 	boolean sendCheckCode(int type, String target);
+	
+	/**
+	 * 校验验证码是否有效
+	 * @param userinfo
+	 * @return
+	 */
+	boolean checkCodeIsValid(UserRequest userRequest);
+	
+	/**
+	 * 校验验证码是否过期
+	 * @param userRequest
+	 * @return
+	 */
+	Userinfo checkCodeIsOverdue(UserRequest userRequest);
 
 }

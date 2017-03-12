@@ -3,9 +3,11 @@ package com.sunshine.ebook.service.impl;
 import com.sunshine.ebook.entity.Userinfo;
 import com.sunshine.ebook.util.SendCheckCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.sunshine.ebook.mapper.UserMapper;
+import com.sunshine.ebook.request.UserRequest;
 import com.sunshine.ebook.service.UserService;
 
 import java.util.Date;
@@ -14,8 +16,21 @@ import java.util.Date;
 @Transactional
 public class UserServiceImpl implements UserService {
 	
+	@Value("${ebook.checkcode.timeout}")
+	private int timeout;
+	
 	@Autowired
 	private UserMapper userMapper;
+	
+	@Override
+	public Userinfo getUserinfoByCondition(Userinfo userinfo) {
+		try {
+			return userMapper.getUserinfoByCondition(userinfo);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	@Override
 	public Userinfo checkEmailIsRegist(String email) {
@@ -66,10 +81,13 @@ public class UserServiceImpl implements UserService {
 			userinfo.setCreatetime(new Date());
 			userinfo.setUpdatetime(new Date());
 			Userinfo existUser = null;
+			Userinfo queryCondition = new Userinfo();
 			if (0 == type) {
-				existUser = this.checkPhoneIsRegist(target);
+				queryCondition.setPhonenum(target);
+				existUser = this.getUserinfoByCondition(queryCondition);
 			} else if (1 == type) {
-				existUser = this.checkEmailIsRegist(target);
+				queryCondition.setEmail(target);
+				existUser = this.getUserinfoByCondition(queryCondition);
 			}
 			boolean saveFlag = false;
 			if (null == existUser) {
@@ -78,8 +96,9 @@ public class UserServiceImpl implements UserService {
 			} else {
 				//已经存在注册记录，则更新数据
 				userinfo.setCreatetime(null);
+				userinfo.setUpdatetime(new Date());
 				userinfo.setUserid(existUser.getUserid());
-				userinfo.setUserflag("-1");
+				userinfo.setUserflag(-1);
 				saveFlag = this.updateUserinfo(userinfo);
 			}
 			if (saveFlag) {
@@ -89,6 +108,34 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 		}
 		return flag;
+	}
+
+	@Override
+	public boolean checkCodeIsValid(UserRequest userRequest) {
+		boolean flag = false;
+		String checkCode = userRequest.getCheckcode();
+		Userinfo user = new Userinfo();
+		user.setCheckcode(checkCode);
+		if (userRequest.getRegistType() == 0) {
+			// 手机号
+			user.setPhonenum(userRequest.getTarget());
+		} else {
+			// 邮箱
+			user.setEmail(userRequest.getTarget());
+		}
+		Userinfo userinfo = userMapper.getUserinfoByCondition(user);
+		if (null != userinfo) {
+			flag = true;
+		}
+		return flag;
+	}
+
+	@Override
+	public Userinfo checkCodeIsOverdue(UserRequest userRequest) {
+		Userinfo userinfo = new Userinfo(userRequest);
+		userinfo.setTimeout(timeout);
+		Userinfo user = userMapper.checkCodeIsValid(userinfo);
+		return user;
 	}
 
 }

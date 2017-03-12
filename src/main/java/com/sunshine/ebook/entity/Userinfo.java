@@ -3,21 +3,42 @@ package com.sunshine.ebook.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.sunshine.ebook.request.UserRequest;
+import com.sunshine.ebook.util.MD5Util;
+
 public class Userinfo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	//无参构造
+	public Userinfo() {}
+	
+	public Userinfo(UserRequest userRequest) {
+		this.username = userRequest.getUsername();
+		this.password = MD5Util.encoderByMd5(userRequest.getPassword());
+		int type = userRequest.getRegistType();
+		if (0 == type) {
+			//手机号
+			this.phonenum = userRequest.getTarget();
+		} else {
+			//邮箱
+			this.email = userRequest.getTarget();
+		}
+		this.checkcode = userRequest.getCheckcode();
+	}
 	
 	private Integer userid;
 	private String username;
 	private String password;
 	private String phonenum;
 	private String email;
-	private String userflag;
-	private String usertype;
+	private Integer userflag;
+	private Integer usertype;
 	private String checkcode;
 	private Date createtime;
 	private Date updatetime;
 	private Date lastlogtime;
+	private Integer timeout;
 
 	public Integer getUserid() {
 		return userid;
@@ -59,19 +80,19 @@ public class Userinfo implements Serializable {
 		this.email = email;
 	}
 
-	public String getUserflag() {
+	public Integer getUserflag() {
 		return userflag;
 	}
 
-	public void setUserflag(String userflag) {
+	public void setUserflag(Integer userflag) {
 		this.userflag = userflag;
 	}
 
-	public String getUsertype() {
+	public Integer getUsertype() {
 		return usertype;
 	}
 
-	public void setUsertype(String usertype) {
+	public void setUsertype(Integer usertype) {
 		this.usertype = usertype;
 	}
 
@@ -105,5 +126,13 @@ public class Userinfo implements Serializable {
 
 	public void setLastlogtime(Date lastlogtime) {
 		this.lastlogtime = lastlogtime;
+	}
+
+	public Integer getTimeout() {
+		return timeout;
+	}
+
+	public void setTimeout(Integer timeout) {
+		this.timeout = timeout;
 	}
 }
