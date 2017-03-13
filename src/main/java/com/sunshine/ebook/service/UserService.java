@@ -2,6 +2,7 @@ package com.sunshine.ebook.service;
 
 import java.util.List;
 
+import com.sunshine.ebook.entity.Permission;
 import com.sunshine.ebook.entity.Role;
 import com.sunshine.ebook.entity.Userinfo;
 import com.sunshine.ebook.request.UserRequest;
@@ -68,5 +69,12 @@ public interface UserService {
 	 * @return
 	 */
 	List<Role> getRolesByUserId(Integer userid);
+	
+	/**
+	 * 根据角色ID获取权限信息
+	 * @param roleid
+	 * @return
+	 */
+	List<Permission> getPermissionsByRoleId(Integer roleid);
 
 }

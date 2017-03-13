@@ -166,5 +166,11 @@
     	select b.roleid, b.name, b.description from user_role a, role b 
     	where a.roleid = b.roleid and a.userid = #{userid}
     </select>
+    
+    <!-- 根据角色ID获取权限信息 -->
+    <select id="getPermissionsByRoleId" resultType="com.sunshine.ebook.entity.Permission">
+    	select b.permissionid, b.name, b.description from role_permission a, permission b 
+    	where a.permissionid = b. permissionid and a.roleid = #{roleid}
+    </select>
 
 </mapper> 

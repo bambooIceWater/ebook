@@ -1,5 +1,6 @@
 package com.sunshine.ebook.service.impl;
 
+import com.sunshine.ebook.entity.Permission;
 import com.sunshine.ebook.entity.Role;
 import com.sunshine.ebook.entity.Userinfo;
 import com.sunshine.ebook.util.SendCheckCode;
@@ -147,6 +148,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<Role> getRolesByUserId(Integer userid) {
 		return userMapper.getRolesByUserId(userid);
+	}
+
+	@Override
+	public List<Permission> getPermissionsByRoleId(Integer roleid) {
+		return userMapper.getPermissionsByRoleId(roleid);
 	}
 
 }

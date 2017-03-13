@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 public class Role implements Serializable {
 
-    private Integer uuid;
+	private static final long serialVersionUID = 1L;
+	
+	private Integer uuid;
     private Integer roleid;
     private String name;
     private String description;

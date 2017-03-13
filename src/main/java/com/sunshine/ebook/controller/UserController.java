@@ -2,6 +2,7 @@ package com.sunshine.ebook.controller;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -173,12 +174,22 @@ public class UserController {
 
 	@ApiOperation(value = "上传文件")
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	@RequiresRoles("admin")
+	//@RequiresRoles("admin")
+	//@RequiresPermissions("upload")
 	public ResponseEntity upload() {
 		System.out.println("-------------------------------------");
 		//获取当前的Subject
 		Subject currentUser = SecurityUtils.getSubject();
-		boolean hasAdmin = currentUser.hasRole("admin");
+		try {
+			//检查用户是否有上传权限
+			currentUser.checkPermission("upload");
+		} catch (Exception e) {
+			e.printStackTrace();
+			ErrorResponse response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "没有权限");
+			return ResponseEntity.badRequest().body(response);
+		}
+		
+		boolean hasAdmin = currentUser.hasRole("upload");
 		System.out.println("******************hasAdmin=" + hasAdmin);
 		return null;
 	}

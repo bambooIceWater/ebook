@@ -3,6 +3,7 @@ package com.sunshine.ebook.mapper;
 import java.util.List;
 
 import com.sunshine.ebook.common.mapper.BaseMapper;
+import com.sunshine.ebook.entity.Permission;
 import com.sunshine.ebook.entity.Role;
 import com.sunshine.ebook.entity.Userinfo;
 
@@ -54,5 +55,12 @@ public interface UserMapper extends BaseMapper<Userinfo> {
 	 * @return
 	 */
 	List<Role> getRolesByUserId(Integer userid);
+	
+	/**
+	 * 根据角色ID获取权限信息
+	 * @param roleid
+	 * @return
+	 */
+	List<Permission> getPermissionsByRoleId(Integer roleid);
 	
 }
