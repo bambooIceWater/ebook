@@ -1,5 +1,6 @@
 package com.sunshine.ebook.service.impl;
 
+import com.sunshine.ebook.entity.Role;
 import com.sunshine.ebook.entity.Userinfo;
 import com.sunshine.ebook.util.SendCheckCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sunshine.ebook.mapper.UserMapper;
 import com.sunshine.ebook.request.UserRequest;
 import com.sunshine.ebook.service.UserService;
-
 import java.util.Date;
+import java.util.List;
 
 @Service("userService")
 @Transactional
@@ -141,6 +142,11 @@ public class UserServiceImpl implements UserService {
 		userinfo.setTimeout(timeout);
 		Userinfo user = userMapper.checkCodeIsValid(userinfo);
 		return user;
+	}
+
+	@Override
+	public List<Role> getRolesByUserId(Integer userid) {
+		return userMapper.getRolesByUserId(userid);
 	}
 
 }

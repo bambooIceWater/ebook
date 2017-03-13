@@ -160,5 +160,11 @@
         	</if>
         </where>
     </select>
+    
+    <!-- 根据用户ID获取用户角色信息 -->
+    <select id="getRolesByUserId" resultType="com.sunshine.ebook.entity.Role">
+    	select b.roleid, b.name, b.description from user_role a, role b 
+    	where a.roleid = b.roleid and a.userid = #{userid}
+    </select>
 
 </mapper> 

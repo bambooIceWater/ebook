@@ -1,5 +1,8 @@
 package com.sunshine.ebook.service;
 
+import java.util.List;
+
+import com.sunshine.ebook.entity.Role;
 import com.sunshine.ebook.entity.Userinfo;
 import com.sunshine.ebook.request.UserRequest;
 
@@ -58,5 +61,12 @@ public interface UserService {
 	 * @return
 	 */
 	Userinfo checkCodeIsOverdue(UserRequest userRequest);
+	
+	/**
+	 * 根据用户ID获取用户角色信息
+	 * @param userid
+	 * @return
+	 */
+	List<Role> getRolesByUserId(Integer userid);
 
 }

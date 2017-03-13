@@ -1,7 +1,5 @@
 package com.sunshine.ebook.controller;
 
-import java.util.Date;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -24,8 +22,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
-import static org.apache.shiro.web.filter.mgt.DefaultFilter.user;
-
 @Api(tags = "用户相关接口")
 @RestController
 @RequestMapping(value = "/api/v1/user")
@@ -38,7 +34,8 @@ public class UserController {
 	
 	@ApiOperation(value = "判断手机号或邮箱是否存在")
 	@RequestMapping(value = "/checkPhoneOrEmailIsRegist", method = RequestMethod.GET)
-	public ResponseEntity checkEmailIsRegist(@ApiParam(value = "调用类型，0=注册，1=密码找回", required = true) @RequestParam("invokeType") int invokeType,
+	public ResponseEntity checkEmailIsRegist(
+			@ApiParam(value = "调用类型，0=注册，1=密码找回", required = true) @RequestParam("invokeType") int invokeType,
 			@ApiParam(value = "注册类型，0=手机号注册，1=邮箱注册", required = true) @RequestParam("type") int type,
 			@ApiParam(value = "手机号或邮箱", required = true) @RequestParam("target") String target) {
 		String key = null;
@@ -179,6 +176,10 @@ public class UserController {
 	@RequiresRoles("admin")
 	public ResponseEntity upload() {
 		System.out.println("-------------------------------------");
+		//获取当前的Subject
+		Subject currentUser = SecurityUtils.getSubject();
+		boolean hasAdmin = currentUser.hasRole("admin");
+		System.out.println("******************hasAdmin=" + hasAdmin);
 		return null;
 	}
 

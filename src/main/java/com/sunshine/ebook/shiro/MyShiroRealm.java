@@ -1,8 +1,12 @@
 package com.sunshine.ebook.shiro;
 
+import com.sunshine.ebook.entity.Role;
 import com.sunshine.ebook.entity.Userinfo;
 import com.sunshine.ebook.service.UserService;
 import com.sunshine.ebook.util.MD5Util;
+
+import java.util.List;
+
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.shiro.authc.*;
@@ -34,6 +38,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         if (user != null) {
             //权限信息对象info,用来存放查出的用户的所有的角色（role）及权限（permission）
             SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+            List<Role> roles = userService.getRolesByUserId(user.getUserid());
 //            //用户的角色集合
 //            info.setRoles(user.getRolesName());
 //            //用户的角色对应的所有权限，如果只使用角色定义访问权限，下面的四行可以不要

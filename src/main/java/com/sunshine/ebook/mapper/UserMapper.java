@@ -1,6 +1,9 @@
 package com.sunshine.ebook.mapper;
 
+import java.util.List;
+
 import com.sunshine.ebook.common.mapper.BaseMapper;
+import com.sunshine.ebook.entity.Role;
 import com.sunshine.ebook.entity.Userinfo;
 
 public interface UserMapper extends BaseMapper<Userinfo> {
@@ -44,5 +47,12 @@ public interface UserMapper extends BaseMapper<Userinfo> {
 	 * @return
 	 */
 	Userinfo checkCodeIsValid(Userinfo userinfo);
+	
+	/**
+	 * 根据用户ID获取用户角色信息
+	 * @param userid
+	 * @return
+	 */
+	List<Role> getRolesByUserId(Integer userid);
 	
 }
