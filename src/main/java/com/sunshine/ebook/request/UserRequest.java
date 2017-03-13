@@ -7,7 +7,7 @@ public class UserRequest {
 
 	private String username;
 	private String password;
-	private int registType;
+	private int type;
 	private String target;
 	private String checkcode;
 
@@ -27,12 +27,12 @@ public class UserRequest {
 		this.password = password;
 	}
 
-	public int getRegistType() {
-		return registType;
+	public int getType() {
+		return type;
 	}
 
-	public void setRegistType(int registType) {
-		this.registType = registType;
+	public void setType(int type) {
+		this.type = type;
 	}
 
 	public String getTarget() {

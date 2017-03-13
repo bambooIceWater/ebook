@@ -16,7 +16,7 @@ public class Userinfo implements Serializable {
 	public Userinfo(UserRequest userRequest) {
 		this.username = userRequest.getUsername();
 		this.password = MD5Util.encoderByMd5(userRequest.getPassword());
-		int type = userRequest.getRegistType();
+		int type = userRequest.getType();
 		if (0 == type) {
 			//手机号
 			this.phonenum = userRequest.getTarget();

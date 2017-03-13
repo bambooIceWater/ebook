@@ -43,7 +43,7 @@ public interface UserService {
 	 * @param type
 	 * @return
 	 */
-	boolean sendCheckCode(int type, String target);
+	boolean sendCheckCode(int sendType, int type, String target);
 	
 	/**
 	 * 校验验证码是否有效

@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean sendCheckCode(int type, String target) {
+	public boolean sendCheckCode(int sendType, int type, String target) {
 		boolean flag = false;
 		try {
 			String checkCode = SendCheckCode.getCheckCode(type);
@@ -84,11 +84,14 @@ public class UserServiceImpl implements UserService {
 			Userinfo queryCondition = new Userinfo();
 			if (0 == type) {
 				queryCondition.setPhonenum(target);
-				existUser = this.getUserinfoByCondition(queryCondition);
 			} else if (1 == type) {
 				queryCondition.setEmail(target);
-				existUser = this.getUserinfoByCondition(queryCondition);
 			}
+			if (sendType == 1) {
+				// 密码找回
+				queryCondition.setUserflag(0);
+			}
+			existUser = this.getUserinfoByCondition(queryCondition);
 			boolean saveFlag = false;
 			if (null == existUser) {
 				//不存在注册记录，则插入数据
@@ -98,7 +101,9 @@ public class UserServiceImpl implements UserService {
 				userinfo.setCreatetime(null);
 				userinfo.setUpdatetime(new Date());
 				userinfo.setUserid(existUser.getUserid());
-				userinfo.setUserflag(-1);
+				if (sendType == 0) {
+					userinfo.setUserflag(-1);
+				}
 				saveFlag = this.updateUserinfo(userinfo);
 			}
 			if (saveFlag) {
@@ -116,7 +121,7 @@ public class UserServiceImpl implements UserService {
 		String checkCode = userRequest.getCheckcode();
 		Userinfo user = new Userinfo();
 		user.setCheckcode(checkCode);
-		if (userRequest.getRegistType() == 0) {
+		if (userRequest.getType() == 0) {
 			// 手机号
 			user.setPhonenum(userRequest.getTarget());
 		} else {
