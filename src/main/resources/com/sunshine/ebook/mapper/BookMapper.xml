@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunshine.ebook.mapper.BookMapper">
+
+    <!-- type为实体类Book，包名已经配置，可以直接写类名 -->
+    <resultMap id="bookResultMap" type="com.sunshine.ebook.entity.Book">
+        <result column="bookid" property="bookid" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="author" property="author" jdbcType="VARCHAR"/>
+        <result column="categoryid" property="categoryid" jdbcType="INTEGER"/>
+        <result column="cover" property="cover" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="flag" property="flag" jdbcType="INTEGER"/>
+        <result column="savepath" property="savepath" jdbcType="VARCHAR"/>
+        <result column="createtime" property="createtime" jdbcType="TIMESTAMP"/>
+        <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        bookid, name, author, categoryid, cover, description, flag, savepath, createtime, updatetime
+    </sql>
+    
+    <!-- 根据条件查询电子书信息 -->
+    <select id="getBookinfoByCondition" resultMap="bookResultMap" parameterMap="java.uti.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from book 
+        <where>
+        	<if test ="bookid != null">
+        		and bookid = #{bookid}
+        	</if>
+        	<if test ="name != null">
+        		and name = #{name}
+        	</if>
+        	<if test ="author != null">
+        		and author = #{author}
+        	</if>
+        	<if test ="category != null">
+        		and category = #{category}
+        	</if>
+        	<if test ="cover != null">
+        		and cover = #{cover}
+        	</if>
+        	<if test ="description != null">
+        		and description = #{description}
+        	</if>
+        	<if test ="flag != null">
+        		and flag = #{flag}
+        	</if>
+        	<if test ="savepath != null">
+        		and savepath = #{savepath}
+        	</if>
+        	<if test ="createtime != null">
+        		and createtime = #{createtime}
+        	</if>
+        	<if test ="updatetime != null">
+        		and updatetime = #{updatetime}
+        	</if>
+        </where>
+    </select>
+
+    <!-- 保存电子书信息 -->
+    <insert id="saveBookinfo" parameterMap="java.util.HashMap">
+        insert into book(name, author, categoryid, cover, description, flag, createtime, updatetime)
+        values(#{name}, #{author}, #{categoryid}, #{cover}, #{description}, #{flag}, #{createtime},
+        #{updatetime})
+    </insert>
+
+    <!-- 更新电子书信息 -->
+    <update id="updateBookinfo" parameterMap="java.util.HashMap">
+        update book
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="author != null">
+                author = #{author,jdbcType=VARCHAR},
+            </if>
+            <if test="catetoryid != null">
+                catetoryid = #{catetoryid,jdbcType=INTEGER},
+            </if>
+            <if test="cover != null">
+                cover = #{cover,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description, jdbcType=VARCHAR},
+            </if>
+            <if test="flag != null">
+                flag = #{flag,jdbcType=INTEGER},
+            </if>
+            <if test="savepath != null">
+                savepath = #{savepath,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null">
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatetime != null">
+                updatetime = #{updatetime, jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where bookid = #{bookid}
+    </update>
+
+</mapper> 

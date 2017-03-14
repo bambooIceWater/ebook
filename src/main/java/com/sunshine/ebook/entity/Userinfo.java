@@ -2,15 +2,13 @@ package com.sunshine.ebook.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
-import com.sunshine.ebook.mapper.UserMapper;
 import com.sunshine.ebook.request.UserRequest;
 import com.sunshine.ebook.util.MD5Util;
 
 public class Userinfo implements Serializable {
 	
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 6787126056301791585L;
+
 	//无参构造
 	public Userinfo() {}
 	

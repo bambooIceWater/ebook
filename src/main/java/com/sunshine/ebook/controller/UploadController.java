@@ -2,6 +2,8 @@ package com.sunshine.ebook.controller;
 
 import com.sunshine.ebook.common.response.ErrorResponse;
 import com.sunshine.ebook.entity.Userinfo;
+import com.sunshine.ebook.request.BookRequest;
+import com.sunshine.ebook.request.UserRequest;
 import com.sunshine.ebook.util.GenerateUUID;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,9 +41,7 @@ public class UploadController {
     //@RequiresPermissions("upload")
     public ResponseEntity upload(
             @ApiParam(value = "文件", required = true) @RequestPart MultipartFile file,
-            @ApiParam(value = "用户ID", required = true) @RequestParam("userid") int userid
-    ) {
-        System.out.println("-------------------------------------");
+            @ApiParam(value = "Json请求体", required = true) @RequestBody BookRequest bookRequest) {
         //获取当前的Subject
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
@@ -58,15 +58,14 @@ public class UploadController {
         }
         String fileName = file.getOriginalFilename();
         String sux = fileName.substring(fileName.lastIndexOf("."));
-        Collection<Userinfo> reamInfo = subject.getPrincipals().fromRealm("user");
         String relativelyPath = System.getProperty("user.dir");
         File parentFile = new File(relativelyPath).getParentFile();
+        Integer userid = bookRequest.getUserid();
         String savePath = parentFile.getPath() + File.separator + ebookPath + File.separator + userid + File.separator;
         File folder = new File(savePath);
         if (!folder.exists()) {
             folder.mkdirs();
         }
-
         String saveFile = savePath + GenerateUUID.generateFileId() + sux;
         logger.info("文件保存路径：" + saveFile);
         try {
@@ -77,6 +76,7 @@ public class UploadController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
         return null;
     }
 

@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sunshine.ebook.mapper.UserMapper">
 
-    <!-- type为实体类Student，包名已经配置，可以直接写类名 -->
+    <!-- type为实体类Book，包名已经配置，可以直接写类名 -->
     <resultMap id="userResultMap" type="com.sunshine.ebook.entity.Userinfo">
         <result column="userid" property="userid" jdbcType="INTEGER"/>
         <result column="username" property="username" jdbcType="VARCHAR"/>
