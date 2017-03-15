@@ -8,7 +8,6 @@ public class BookRequest {
 	private Integer userid;
 	private String name;
 	private String author;
-	private String cover;
 	private Integer categoryid;
 	private String description;
 
@@ -34,14 +33,6 @@ public class BookRequest {
 
 	public void setAuthor(String author) {
 		this.author = author;
-	}
-
-	public String getCover() {
-		return cover;
-	}
-
-	public void setCover(String cover) {
-		this.cover = cover;
 	}
 
 	public Integer getCategoryid() {

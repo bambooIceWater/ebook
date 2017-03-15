@@ -22,7 +22,7 @@
     </sql>
     
     <!-- 根据条件查询电子书信息 -->
-    <select id="getBookinfoByCondition" resultMap="bookResultMap" parameterMap="java.uti.HashMap">
+    <select id="getBookinfoByCondition" resultMap="bookResultMap" parameterType="java.util.HashMap">
         select
         <include refid="Base_Column_List" />
         from book 
@@ -61,14 +61,13 @@
     </select>
 
     <!-- 保存电子书信息 -->
-    <insert id="saveBookinfo" parameterMap="java.util.HashMap">
-        insert into book(name, author, categoryid, cover, description, flag, createtime, updatetime)
-        values(#{name}, #{author}, #{categoryid}, #{cover}, #{description}, #{flag}, #{createtime},
-        #{updatetime})
+    <insert id="saveBookinfo" parameterType="java.util.HashMap">
+        insert into book(name, author, categoryid, cover, description, savepath, createtime, updatetime)
+        values(#{name}, #{author}, #{categoryid}, #{cover}, #{description}, #{savepath}, #{createtime}, #{updatetime})
     </insert>
 
     <!-- 更新电子书信息 -->
-    <update id="updateBookinfo" parameterMap="java.util.HashMap">
+    <update id="updateBookinfo" parameterType="java.util.HashMap">
         update book
         <set>
             <if test="name != null">

@@ -23,6 +23,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.hadoop.io.IOUtils;
 
 @Api(tags = "文件上传接口")
@@ -41,7 +45,7 @@ public class UploadController {
     //@RequiresPermissions("upload")
     public ResponseEntity upload(
             @ApiParam(value = "文件", required = true) @RequestPart MultipartFile file,
-            @ApiParam(value = "Json请求体", required = true) @RequestBody BookRequest bookRequest) {
+            @ApiParam(value = "电子书封面", required = true) @RequestPart MultipartFile coverFile) {
         //获取当前的Subject
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
@@ -60,7 +64,7 @@ public class UploadController {
         String sux = fileName.substring(fileName.lastIndexOf("."));
         String relativelyPath = System.getProperty("user.dir");
         File parentFile = new File(relativelyPath).getParentFile();
-        Integer userid = bookRequest.getUserid();
+        Integer userid = 99;
         String savePath = parentFile.getPath() + File.separator + ebookPath + File.separator + userid + File.separator;
         File folder = new File(savePath);
         if (!folder.exists()) {
@@ -76,7 +80,6 @@ public class UploadController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
         return null;
     }
 
