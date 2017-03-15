@@ -1,6 +1,6 @@
 package com.sunshine.ebook.controller;
 
-import com.sunshine.ebook.common.response.ErrorResponse;
+import com.sunshine.ebook.common.response.ContentResponse;
 import com.sunshine.ebook.entity.Userinfo;
 import com.sunshine.ebook.request.BookRequest;
 import com.sunshine.ebook.request.UserRequest;
@@ -49,7 +49,7 @@ public class UploadController {
         //获取当前的Subject
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            ErrorResponse response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "请先登录");
+            ContentResponse response = new ContentResponse(HttpStatus.BAD_REQUEST.value(), "请先登录");
             return ResponseEntity.badRequest().body(response);
         }
         try {
@@ -57,7 +57,7 @@ public class UploadController {
             subject.checkPermission("upload");
         } catch (Exception e) {
             e.printStackTrace();
-            ErrorResponse response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "没有权限");
+            ContentResponse response = new ContentResponse(HttpStatus.BAD_REQUEST.value(), "没有权限");
             return ResponseEntity.badRequest().body(response);
         }
         String fileName = file.getOriginalFilename();

@@ -13,12 +13,13 @@
         <result column="description" property="description" jdbcType="VARCHAR"/>
         <result column="flag" property="flag" jdbcType="INTEGER"/>
         <result column="savepath" property="savepath" jdbcType="VARCHAR"/>
+        <result column="linecount" property="linecount" jdbcType="INTEGER"/>
         <result column="createtime" property="createtime" jdbcType="TIMESTAMP"/>
         <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        bookid, name, author, categoryid, cover, description, flag, savepath, createtime, updatetime
+        bookid, name, author, categoryid, cover, description, flag, savepath, linecount,createtime, updatetime
     </sql>
     
     <!-- 根据条件查询电子书信息 -->
@@ -62,8 +63,8 @@
 
     <!-- 保存电子书信息 -->
     <insert id="saveBookinfo" parameterType="java.util.HashMap">
-        insert into book(name, author, categoryid, cover, description, savepath, createtime, updatetime)
-        values(#{name}, #{author}, #{categoryid}, #{cover}, #{description}, #{savepath}, #{createtime}, #{updatetime})
+        insert into book(name, author, categoryid, cover, description, savepath, linecount, createtime, updatetime)
+        values(#{name}, #{author}, #{categoryid}, #{cover}, #{description}, #{savepath}, #{linecount}, #{createtime}, #{updatetime})
     </insert>
 
     <!-- 更新电子书信息 -->
@@ -90,6 +91,9 @@
             </if>
             <if test="savepath != null">
                 savepath = #{savepath,jdbcType=VARCHAR},
+            </if>
+            <if test="linecount != null">
+                linecount = #{linecount,jdbcType=VARCHAR},
             </if>
             <if test="createtime != null">
                 createtime = #{createtime,jdbcType=TIMESTAMP},

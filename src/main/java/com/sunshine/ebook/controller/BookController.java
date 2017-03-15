@@ -2,15 +2,9 @@ package com.sunshine.ebook.controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
-
-import com.sunshine.ebook.entity.Book;
-import io.swagger.models.Response;
-import org.apache.hadoop.io.IOUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -19,12 +13,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import com.sunshine.ebook.common.response.ErrorResponse;
-import com.sunshine.ebook.request.BookRequest;
+import com.sunshine.ebook.common.response.ContentResponse;
+import com.sunshine.ebook.entity.Book;
 import com.sunshine.ebook.service.BookService;
 import com.sunshine.ebook.util.GenerateUUID;
+import com.sunshine.ebook.util.FileUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -34,7 +33,7 @@ import io.swagger.annotations.ApiParam;
 @RequestMapping(value = "api/v1/book")
 public class BookController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(UploadController.class);
+	private static final Logger logger = LoggerFactory.getLogger(BookController.class);
 
     @Value("${ebook.ebookPath}")
     private String ebookPath;
@@ -46,7 +45,7 @@ public class BookController {
     @RequestMapping(value = "/uploadBookFile", method = RequestMethod.POST)
     //@RequiresRoles("admin")
     //@RequiresPermissions("upload")
-    public ResponseEntity<ErrorResponse> uploadBookFile(
+    public ResponseEntity<ContentResponse> uploadBookFile(
             @ApiParam(value = "电子书文件", required = true) @RequestPart MultipartFile bookFile,
             @ApiParam(value = "电子书封面", required = true) @RequestPart MultipartFile coverFile,
             @ApiParam(value = "书名", required = true) @RequestParam("name") String name,
@@ -57,7 +56,7 @@ public class BookController {
         //获取当前的Subject
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            ErrorResponse response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "请先登录");
+            ContentResponse response = new ContentResponse(HttpStatus.BAD_REQUEST.value(), "请先登录");
             return ResponseEntity.badRequest().body(response);
         }
         try {
@@ -65,7 +64,7 @@ public class BookController {
             subject.checkPermission("upload");
         } catch (Exception e) {
             e.printStackTrace();
-            ErrorResponse response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "没有权限");
+            ContentResponse response = new ContentResponse(HttpStatus.BAD_REQUEST.value(), "没有权限");
             return ResponseEntity.badRequest().body(response);
         }
         String fileName = bookFile.getOriginalFilename();
@@ -85,17 +84,16 @@ public class BookController {
         logger.info("文件保存路径：" + saveBookFile);
         try {
             //保存电子书文件
-            FileOutputStream out = new FileOutputStream(new File(saveBookFile));
-            IOUtils.copyBytes(bookFile.getInputStream(), out, 1024, true);
+        	FileUtil.saveFileToPath(saveBookFile, bookFile.getInputStream(), true);
 
             //保存封面文件
-            FileOutputStream coverOut = new FileOutputStream(new File(saveCoverFile));
-            IOUtils.copyBytes(coverFile.getInputStream(), coverOut, 1024, true);
+        	FileUtil.saveFileToPath(saveCoverFile, coverFile.getInputStream(), false);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        int lineCount = FileUtil.getTotalLines(saveBookFile);
         HashMap<String, Object> map = new HashMap<>();
         Date date = new Date();
         if (null != name) {
@@ -112,31 +110,34 @@ public class BookController {
         }
         map.put("savepath", saveBookFile);
         map.put("cover", saveCoverFile);
+        map.put("linecount", lineCount);
         map.put("createtime", date);
         map.put("updatetime", date);
         boolean flag = bookService.saveBookinfo(map);
         if (flag) {
         	return ResponseEntity.ok().build();
         } else {
-        	ErrorResponse response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "文件上传失败");
+        	ContentResponse response = new ContentResponse(HttpStatus.BAD_REQUEST.value(), "文件上传失败");
 			return ResponseEntity.badRequest().body(response);
         }
     }
 
     @ApiOperation(value = "阅读电子书")
     @RequestMapping(value = "/readBookForPage", method = RequestMethod.GET)
-    public ResponseEntity<Response> readBookForPage(
+    public ResponseEntity<String> readBookForPage(
             @ApiParam(value = "电子书ID", required = true) @RequestParam("bookId") String bookId,
-            @ApiParam(value = "每页行数", required = true) @RequestParam("pageSize") String pageSize,
-            @ApiParam(value = "当前页码", required = true) @RequestParam("pageNum") String pageNum) {
+            @ApiParam(value = "每页行数", required = true) @RequestParam("pageSize") int pageSize,
+            @ApiParam(value = "当前页码", required = true) @RequestParam("pageNum") int pageNum) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("bookid", bookId);
         Book bookinfo = bookService.getBookinfoByCondition(map);
-        System.out.println("name=" + bookinfo.getName() + ";author=" + bookinfo.getAuthor());
+        String content = null;
         if (null != bookinfo) {
-
+        	String filePath = bookinfo.getSavepath();
+        	Integer lineCount = bookinfo.getLinecount();
+        	content = FileUtil.readForPage(filePath, pageNum, pageSize, lineCount);
         }
-        return null;
+        return ResponseEntity.ok().body(content);
     }
 
 }

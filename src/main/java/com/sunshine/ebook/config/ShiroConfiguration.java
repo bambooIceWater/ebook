@@ -1,18 +1,18 @@
 package com.sunshine.ebook.config;
 
-import com.sunshine.ebook.shiro.MyShiroRealm;
-import org.apache.shiro.cache.ehcache.EhCacheManager;
-import org.apache.shiro.web.filter.authc.LogoutFilter;
-import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-
-import javax.servlet.Filter;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import javax.servlet.Filter;
+
+import org.apache.shiro.cache.ehcache.EhCacheManager;
+import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.filter.authc.LogoutFilter;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import com.sunshine.ebook.shiro.MyShiroRealm;
 
 /**
  * 配置Shiro
@@ -20,8 +20,6 @@ import java.util.Map;
  */
 @Configuration
 public class ShiroConfiguration {
-
-    private static final Logger logger = LoggerFactory.getLogger(ShiroConfiguration.class);
 
     @Bean
     public EhCacheManager getEhCacheManager() {

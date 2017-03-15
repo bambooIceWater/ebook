@@ -15,6 +15,7 @@ public class Book implements Serializable {
 	private String description;
 	private Integer flag;
 	private String savepath;
+	private Integer linecount;
 	private Date createtime;
 	private Date updatetime;
 
@@ -80,6 +81,14 @@ public class Book implements Serializable {
 
 	public void setSavepath(String savepath) {
 		this.savepath = savepath;
+	}
+
+	public Integer getLinecount() {
+		return linecount;
+	}
+
+	public void setLinecount(Integer linecount) {
+		this.linecount = linecount;
 	}
 
 	public Date getCreatetime() {
