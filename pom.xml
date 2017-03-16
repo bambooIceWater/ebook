@@ -91,12 +91,13 @@
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
 
-		<!-- 添加javaMail支持 -->
+		<!-- 添加commonsMail支持 -->
 		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>1.4.7</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-email</artifactId>
+			<version>1.4</version>
 		</dependency>
+
 
 		<!--Apache Shiro所需的jar包 -->
 		<dependency>

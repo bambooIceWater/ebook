@@ -133,9 +133,27 @@ public class BookController {
         Book bookinfo = bookService.getBookinfoByCondition(map);
         String content = null;
         if (null != bookinfo) {
-        	String filePath = bookinfo.getSavepath();
-        	Integer lineCount = bookinfo.getLinecount();
-        	content = FileUtil.readForPage(filePath, pageNum, pageSize, lineCount);
+            String filePath = bookinfo.getSavepath();
+            Integer lineCount = bookinfo.getLinecount();
+            content = FileUtil.readForPage(filePath, pageNum, pageSize, lineCount);
+        }
+        return ResponseEntity.ok().body(content);
+    }
+
+    @ApiOperation(value = "查询电子书")
+    @RequestMapping(value = "/queryBook", method = RequestMethod.GET)
+    public ResponseEntity<String> queryBook(
+            @ApiParam(value = "电子书ID", required = true) @RequestParam("bookId") String bookId,
+            @ApiParam(value = "每页行数", required = true) @RequestParam("pageSize") int pageSize,
+            @ApiParam(value = "当前页码", required = true) @RequestParam("pageNum") int pageNum) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("bookid", bookId);
+        Book bookinfo = bookService.getBookinfoByCondition(map);
+        String content = null;
+        if (null != bookinfo) {
+            String filePath = bookinfo.getSavepath();
+            Integer lineCount = bookinfo.getLinecount();
+            content = FileUtil.readForPage(filePath, pageNum, pageSize, lineCount);
         }
         return ResponseEntity.ok().body(content);
     }

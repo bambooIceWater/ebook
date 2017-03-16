@@ -173,4 +173,9 @@
     	where a.permissionid = b. permissionid and a.roleid = #{roleid}
     </select>
 
+    <!-- 保存用户角色信息 -->
+    <insert id="saveUserRole">
+        insert into user_role(userid, roleid) values(#{param1}, #{param2})
+    </insert>
+
 </mapper> 

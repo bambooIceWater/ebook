@@ -74,10 +74,18 @@ public class UserController {
 			@ApiParam(value = "注册类型，0=手机号，1=邮箱", required = true) @RequestParam("type") int type,
 			@ApiParam(value = "手机号或邮箱", required = true) @RequestParam("target") String target) {
 		boolean flag = userService.sendCheckCode(sendType, type, target);
-		if (flag) {
-			return ResponseEntity.ok().build();
+		ContentResponse response = null;
+		String value = "";
+		if (1 == type) {
+			value = "邮箱";
 		} else {
-			ContentResponse response = new ContentResponse(HttpStatus.BAD_REQUEST.value(), "验证码发送失败");
+			value = "手机号";
+		}
+		if (flag) {
+			response = new ContentResponse(HttpStatus.OK.value(), "验证码已发送指定的" + value + "，请注意查收");
+			return ResponseEntity.accepted().body(response);
+		} else {
+			response = new ContentResponse(HttpStatus.BAD_REQUEST.value(), "验证码发送失败");
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
@@ -99,7 +107,7 @@ public class UserController {
 		Userinfo user = new Userinfo(userRequest);
 		user.setUserid(userinfo.getUserid());
 		user.setUserflag(0);
-		boolean flag = userService.updateUserinfo(user);
+		boolean flag = userService.registerUserinfo(user);
 		if (flag) {
 			return ResponseEntity.ok().build();
 		} else {
@@ -178,7 +186,7 @@ public class UserController {
 			return ResponseEntity.badRequest().body(response);
 		}catch(AuthenticationException ae){
 			logger.info("对用户[" + username + "]进行登录验证..验证未通过,堆栈轨迹如下");
-			ContentResponse response = new ContentResponse(HttpStatus.BAD_REQUEST.value(), "用户名或密码不正确");
+			ContentResponse response = new ContentResponse(HttpStatus.BAD_REQUEST.value(), "账户或密码不正确");
 			return ResponseEntity.badRequest().body(response);
 		}
 	}

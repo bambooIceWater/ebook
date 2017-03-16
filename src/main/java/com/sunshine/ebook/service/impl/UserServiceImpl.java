@@ -3,6 +3,7 @@ package com.sunshine.ebook.service.impl;
 import com.sunshine.ebook.entity.Permission;
 import com.sunshine.ebook.entity.Role;
 import com.sunshine.ebook.entity.Userinfo;
+import com.sunshine.ebook.util.MailUtil;
 import com.sunshine.ebook.util.SendCheckCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -69,6 +70,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public boolean registerUserinfo(Userinfo userinfo) {
+		userMapper.updateUserinfo(userinfo);
+		userMapper.saveUserRole(userinfo.getUserid(), 1);
+		return true;
+	}
+
+	@Override
 	public boolean sendCheckCode(int sendType, int type, String target) {
 		boolean flag = false;
 		try {
@@ -109,6 +117,17 @@ public class UserServiceImpl implements UserService {
 				saveFlag = this.updateUserinfo(userinfo);
 			}
 			if (saveFlag) {
+				String content = "";
+				if (sendType == 1) {
+					content = "您的验证码为：" + checkCode;
+				} else {
+					content = "欢迎加入XX电子书，您的注册验证码为：" + checkCode;
+				}
+				if (type == 1) {
+					new MailUtil().sendMail(sendType, target, content);
+				} else {
+					//发送手机短信
+				}
 				flag = true;
 			}
 		} catch (Exception e) {
@@ -153,6 +172,18 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<Permission> getPermissionsByRoleId(Integer roleid) {
 		return userMapper.getPermissionsByRoleId(roleid);
+	}
+
+	@Override
+	public boolean saveUserRole(Integer userid, Integer roleid) {
+		boolean flag = false;
+		try {
+			userMapper.saveUserRole(userid, roleid);
+			flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return flag;
 	}
 
 }

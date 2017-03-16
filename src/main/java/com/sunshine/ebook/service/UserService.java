@@ -43,6 +43,13 @@ public interface UserService {
 	boolean updateUserinfo(Userinfo userinfo);
 
 	/**
+	 * 注册用户
+	 * @param userinfo
+	 * @return
+	 */
+	boolean registerUserinfo(Userinfo userinfo);
+
+	/**
 	 * 发送验证码
 	 * @param type
 	 * @return
@@ -51,7 +58,7 @@ public interface UserService {
 	
 	/**
 	 * 校验验证码是否有效
-	 * @param userinfo
+	 * @param userRequest
 	 * @return
 	 */
 	boolean checkCodeIsValid(UserRequest userRequest);
@@ -76,5 +83,12 @@ public interface UserService {
 	 * @return
 	 */
 	List<Permission> getPermissionsByRoleId(Integer roleid);
+
+	/**
+	 * 保存用户角色信息
+	 * @param userid
+	 * @param roleid
+	 */
+	boolean saveUserRole(Integer userid, Integer roleid);
 
 }

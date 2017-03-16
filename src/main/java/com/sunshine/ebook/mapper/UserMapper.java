@@ -44,7 +44,7 @@ public interface UserMapper extends BaseMapper<Userinfo> {
 	
 	/**
 	 * 校验验证码是否有效
-	 * @param map
+	 * @param userinfo
 	 * @return
 	 */
 	Userinfo checkCodeIsValid(Userinfo userinfo);
@@ -62,5 +62,12 @@ public interface UserMapper extends BaseMapper<Userinfo> {
 	 * @return
 	 */
 	List<Permission> getPermissionsByRoleId(Integer roleid);
+
+	/**
+	 * 保存用户角色信息
+	 * @param userid
+	 * @param roleid
+	 */
+	void saveUserRole(Integer userid, Integer roleid);
 	
 }
