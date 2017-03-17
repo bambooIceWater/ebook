@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import com.github.pagehelper.Page;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -142,20 +143,14 @@ public class BookController {
 
     @ApiOperation(value = "查询电子书")
     @RequestMapping(value = "/queryBook", method = RequestMethod.GET)
-    public ResponseEntity<String> queryBook(
-            @ApiParam(value = "电子书ID", required = true) @RequestParam("bookId") String bookId,
-            @ApiParam(value = "每页行数", required = true) @RequestParam("pageSize") int pageSize,
-            @ApiParam(value = "当前页码", required = true) @RequestParam("pageNum") int pageNum) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("bookid", bookId);
-        Book bookinfo = bookService.getBookinfoByCondition(map);
-        String content = null;
-        if (null != bookinfo) {
-            String filePath = bookinfo.getSavepath();
-            Integer lineCount = bookinfo.getLinecount();
-            content = FileUtil.readForPage(filePath, pageNum, pageSize, lineCount);
-        }
-        return ResponseEntity.ok().body(content);
+    public ResponseEntity<Page<Book>> queryBook(
+            @ApiParam(value = "书名", required = false) @RequestParam(value = "bookName", required = false) String bookName,
+            @ApiParam(value = "作者", required = false) @RequestParam(value = "author", required = false) String author,
+            @ApiParam(value = "分类", required = false) @RequestParam(value = "categoryid", required = false) Integer categoryid,
+            @ApiParam(value = "当前页数", required = true) @RequestParam("startPage") int startPage,
+            @ApiParam(value = "每页记录数", required = true) @RequestParam("pageSize") int pageSize) {
+        Page<Book> bookList = bookService.queryBookList(bookName, author, categoryid, startPage, pageSize);
+        return ResponseEntity.ok(bookList);
     }
 
 }

@@ -1,6 +1,9 @@
 package com.sunshine.ebook.service;
 
 import java.util.HashMap;
+import java.util.List;
+
+import com.github.pagehelper.Page;
 import com.sunshine.ebook.entity.Book;
 
 public interface BookService {
@@ -23,5 +26,16 @@ public interface BookService {
 	 * @param map
 	 */
 	void updateBookinfo(HashMap<String, Object> map);
+
+	/**
+	 * 查询电子书列表
+	 * @param bookName
+	 * @param author
+	 * @param categoryid
+	 * @param startPage
+	 * @param pageSize
+	 * @return
+	 */
+	Page<Book> queryBookList(String bookName, String author, Integer categoryid, int startPage, int pageSize);
 
 }

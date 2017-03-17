@@ -154,6 +154,13 @@
 			<version>2.7.2</version>
 		</dependency>
 
+		<!-- 添加MyBatis分页插件 -->
+		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper</artifactId>
+			<version>5.0.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

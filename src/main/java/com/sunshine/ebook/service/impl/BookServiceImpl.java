@@ -1,6 +1,11 @@
 package com.sunshine.ebook.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.sunshine.ebook.entity.Book;
@@ -33,6 +38,22 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public void updateBookinfo(HashMap<String, Object> map) {
 		bookMapper.updateBookinfo(map);
+	}
+
+	@Override
+	public Page<Book> queryBookList(String bookName, String author, Integer categoryid, int startPage, int pageSize) {
+		PageHelper.startPage(startPage, pageSize, true);
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		if (null != bookName || !"".equals(bookName)) {
+			map.put("name", bookName);
+		}
+		if (null != author || !"".equals(author)) {
+			map.put("author", author);
+		}
+		if (null != categoryid || !"".equals(categoryid)) {
+			map.put("categoryid", categoryid);
+		}
+		return bookMapper.queryBookList(map);
 	}
 
 }

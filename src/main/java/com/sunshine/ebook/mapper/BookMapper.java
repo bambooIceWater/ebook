@@ -1,8 +1,10 @@
 package com.sunshine.ebook.mapper;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.github.pagehelper.Page;
 import com.sunshine.ebook.entity.Book;
 
 public interface BookMapper {
@@ -25,5 +27,12 @@ public interface BookMapper {
 	 * @param map
 	 */
 	void updateBookinfo(HashMap<String, Object> map);
+
+	/**
+	 * 查询电子书列表
+	 * @param map
+	 * @return
+	 */
+	Page<Book> queryBookList(HashMap<String, Object> map);
 
 }

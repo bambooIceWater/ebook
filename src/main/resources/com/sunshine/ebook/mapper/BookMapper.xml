@@ -105,4 +105,22 @@
         where bookid = #{bookid}
     </update>
 
+    <!-- 查询电子书列表 -->
+    <select id="queryBookList" parameterType="java.util.HashMap"  resultMap="bookResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from book
+        <where>
+            <if test ="name != null">
+                and name like CONCAT('%',#{name},'%')
+            </if>
+            <if test ="author != null">
+                and author = #{author}
+            </if>
+            <if test ="categoryid != null">
+                and categoryid = #{categoryid}
+            </if>
+        </where>
+    </select>
+
 </mapper> 

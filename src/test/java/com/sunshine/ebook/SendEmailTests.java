@@ -13,7 +13,7 @@ public class SendEmailTests {
     public void sendEmail() {
         String address = "913771070@qq.com";
         String content = "这是一个测试邮件，呵呵呵呵";
-        SendEmail.send(address, content);
+//        SendEmail.send(address, content);
     }
 
 }
