@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.sunshine.ebook.common.response.ContentResponse;
+import com.sunshine.ebook.common.response.ListResponse;
 import com.sunshine.ebook.entity.Book;
 import com.sunshine.ebook.service.BookService;
 import com.sunshine.ebook.util.GenerateUUID;
@@ -143,14 +144,16 @@ public class BookController {
 
     @ApiOperation(value = "查询电子书")
     @RequestMapping(value = "/queryBook", method = RequestMethod.GET)
-    public ResponseEntity<Page<Book>> queryBook(
+    public ResponseEntity<ListResponse> queryBook(
             @ApiParam(value = "书名", required = false) @RequestParam(value = "bookName", required = false) String bookName,
             @ApiParam(value = "作者", required = false) @RequestParam(value = "author", required = false) String author,
             @ApiParam(value = "分类", required = false) @RequestParam(value = "categoryid", required = false) Integer categoryid,
             @ApiParam(value = "当前页数", required = true) @RequestParam("startPage") int startPage,
             @ApiParam(value = "每页记录数", required = true) @RequestParam("pageSize") int pageSize) {
         Page<Book> bookList = bookService.queryBookList(bookName, author, categoryid, startPage, pageSize);
-        return ResponseEntity.ok(bookList);
+        ListResponse listResponse = new ListResponse();
+        listResponse.pushAll(bookList);
+        return ResponseEntity.ok(listResponse);
     }
 
 }

@@ -5,8 +5,8 @@ import java.util.Date;
 
 public class Book implements Serializable {
 
-	private static final long serialVersionUID = -8754596598111131194L;
-
+	private static final long serialVersionUID = -8154725580916465669L;
+	
 	private Integer bookid;
 	private String name;
 	private String author;
